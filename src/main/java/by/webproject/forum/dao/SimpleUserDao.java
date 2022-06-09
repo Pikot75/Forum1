@@ -31,7 +31,7 @@ public class SimpleUserDao implements UserDao{
             final ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             if (countCreateRow > 0 && generatedKeys.next()) {
                 return new User.Builder().
-                        withUserId(generatedKeys.getLong(1)).
+                        withUserId(generatedKeys.getLong("user_id")).
                         withUserLogin(user.getLogin()).
                         withUserPassword(user.getPassword()).
                         build();
@@ -44,10 +44,7 @@ public class SimpleUserDao implements UserDao{
 
     @Override
     public Optional<User> findUserByLogin(String login) throws DaoException {
-        try(Connection connection = DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/crm",
-                "postgres", "12345qwert"
-        );
+        try(Connection connection = connectionPool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_USER_BY_LOGIN)){
             preparedStatement.setString(1,login);
             ResultSet resultSet = preparedStatement.executeQuery();
