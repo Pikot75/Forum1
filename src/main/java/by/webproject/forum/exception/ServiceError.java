@@ -12,4 +12,4 @@ public class ServiceError extends Error {
     public ServiceError(String message, Throwable cause) {
         super(message, cause);
     }
-}
+}//

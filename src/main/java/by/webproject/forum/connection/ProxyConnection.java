@@ -287,5 +287,5 @@ public class ProxyConnection implements Connection {
     @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return false;
-    }
+    }//
 }

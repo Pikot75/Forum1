@@ -20,4 +20,4 @@ public class SimpleMessageValidator implements MessageValidator {
         }
         return false;
     }
-}
+}//

@@ -42,7 +42,7 @@ public class SimpleMessageService implements MessageService {
             throw new ServiceError("Cannot find toId");
         }
 
-    }
+    }//
 
     @Override
     public Optional<Message> findFromId(long userId) {

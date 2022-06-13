@@ -30,4 +30,4 @@ public class SimpleUserValidator implements UserValidator {
     public boolean validateUserDataByLoginAndPassword(String login, String password) {
         return validateUserDataByLoginAndPassword(login, password);
     }
-}
+}//

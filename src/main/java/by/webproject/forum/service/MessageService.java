@@ -12,4 +12,4 @@ public interface MessageService {
     List<Message> findToId(long userId);
 
     Optional<Message> findFromId(long userId);
-}
+}//
