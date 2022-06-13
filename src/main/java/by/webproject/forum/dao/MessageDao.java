@@ -14,4 +14,4 @@ public interface MessageDao {
     Optional<Message> findFromId(long userId) throws DaoException;
 
     List<Message> findToId(long userId) throws DaoException;
-}
+}//

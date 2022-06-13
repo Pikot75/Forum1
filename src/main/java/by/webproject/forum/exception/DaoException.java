@@ -13,4 +13,4 @@ public class DaoException extends Exception {
     public DaoException(String massage, Throwable cause) {
         super(massage, cause);
     }
-}
+}//
