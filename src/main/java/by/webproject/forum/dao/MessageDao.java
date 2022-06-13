@@ -10,6 +10,8 @@ import java.util.Optional;
 
 public interface MessageDao {
     boolean addMessage(long fromId, long toId, String message, Date currentDate) throws DaoException;
-   Optional<Message> findFromId (long userId);
-   List<Message> findToId(long userId);
+
+    Optional<Message> findFromId(long userId) throws DaoException;
+
+    List<Message> findToId(long userId) throws DaoException;
 }

@@ -14,7 +14,7 @@ public class Message {
     public Message(Builder builder) {
         messageId = builder.messageId;
         messageTo = builder.messageTo;
-       messageFrom = builder.messageFrom;
+        messageFrom = builder.messageFrom;
         sendDate = builder.sendDate;
         text = builder.text;
     }
@@ -83,32 +83,42 @@ public class Message {
         return Objects.hash(messageId, messageTo, messageFrom, sendDate, text);
     }
 
-    public static class Builder{
+    public static class Builder {
         private long messageId;
         private int messageTo;
         private int messageFrom;
         private Date sendDate;
         private String text;
-public Builder withMessageId(Long messageId){
-    this.messageId = messageId;
-    return this;
-}
-public Builder withUserMessageTo(int messageTo){
-    this.messageTo = messageTo;
-    return this;
-}
-public Builder withUserMessageFrom(int messageFrom){
-    this.messageFrom = messageFrom;
-    return this;
-}
-public Builder withSendDate(Date sendDate){
-    this.sendDate = sendDate;
-    return this;
-}
-public Builder withText(String text){
-    this.text = text;
-    return this;
-}
-    }
 
+        public Builder withMessageId(Long messageId) {
+            this.messageId = messageId;
+            return this;
+        }
+
+        public Builder withUserMessageTo(int messageTo) {
+            this.messageTo = messageTo;
+            return this;
+        }
+
+        public Builder withUserMessageFrom(int messageFrom) {
+            this.messageFrom = messageFrom;
+            return this;
+        }
+
+        public Builder withSendDate(Date sendDate) {
+            this.sendDate = sendDate;
+            return this;
+        }
+
+        public Builder withText(String text) {
+            this.text = text;
+            return this;
+        }
+
+        public Message build() {
+            return new Message(this);
+        }
+    }
 }
+
+

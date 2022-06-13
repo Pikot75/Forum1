@@ -59,11 +59,7 @@ public class ProxyConnection implements Connection {
         PastaConnectionPool.INSTANCE.releaseConnection(this);
     }
 
-    /**
-     * Close connection
-     *
-     * @throws SQLException
-     */
+
     void reallyCLose() throws SQLException {
         this.close();
     }

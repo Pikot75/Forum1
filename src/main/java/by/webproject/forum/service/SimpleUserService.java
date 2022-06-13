@@ -7,14 +7,16 @@ import by.webproject.forum.exception.DaoException;
 import by.webproject.forum.exception.ServiceError;
 import by.webproject.forum.security.PasswordHasher;
 import by.webproject.forum.validator.UserValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.Optional;
 
-public class SimpleUserService implements UserService{
-   private final UserValidator userValidator;
-   private final UserDao userDao;
-   private final PasswordHasher passwordHasher;
+public class SimpleUserService implements UserService {
+    private static final Logger LOG = LoggerFactory.getLogger(SimpleUserService.class);
+    private final UserValidator userValidator;
+    private final UserDao userDao;
+    private final PasswordHasher passwordHasher;
 
     public SimpleUserService(UserValidator userValidator, UserDao userDao, PasswordHasher passwordHasher) {
         this.userValidator = userValidator;
@@ -24,39 +26,43 @@ public class SimpleUserService implements UserService{
 
     @Override
     public User addUserAsAdmin(String login, String password) {
-        if(!userValidator.validateUserDataByLoginAndPassword(login, password)){
+        if (!userValidator.validateUserDataByLoginAndPassword(login, password)) {
             throw new ServiceError("Invalid User data userPassword: " + password + "userLogin: " + login);
         }
         try {
-        final String hashedPassword = passwordHasher.hashPassword(password);
-        final User user = new User.Builder().
-                withUserLogin(login).
-                withUserPassword(hashedPassword).
-                withUserRole(Role.ADMIN).
-                build();
+            final String hashedPassword = passwordHasher.hashPassword(password);
+            final User user = new User.Builder().
+                    withUserLogin(login).
+                    withUserPassword(hashedPassword).
+                    withUserRole(Role.ADMIN).
+                    build();
 
             userDao.addUser(user);
         } catch (DaoException e) {
+            LOG.error("Invalid User data userPassword: " + password + "userLogin: " + login);
             throw new ServiceError("Invalid User data userPassword: " + password + "userLogin: " + login);
         }
+        LOG.error("Invalid User data userPassword: " + password + "userLogin: " + login);
         throw new ServiceError("Invalid User data userPassword: " + password + "userLogin: " + login);
     }
+
     @Override
-    public boolean  addUserAsClient(String login, String password) {
+    public boolean addUserAsClient(String login, String password) {
         if (!userValidator.validateUserDataByLoginAndPassword(login, password)) {
             return false;
         }
         try {
-        final String hashedPassword = passwordHasher.hashPassword(password);
-        final User user = new User.Builder().
-                withUserLogin(login).
-                withUserPassword(password).
-                withUserRole(Role.CLIENT).
-                build();
+            final String hashedPassword = passwordHasher.hashPassword(password);
+            final User user = new User.Builder().
+                    withUserLogin(login).
+                    withUserPassword(password).
+                    withUserRole(Role.CLIENT).
+                    build();
 
             userDao.addUser(user);
         } catch (DaoException e) {
-            throw new ServiceError("Cannot add User");
+            LOG.error("Cannot add UerAsClient");
+            throw new ServiceError("Cannot add UserAsClient");
         }
         return true;
     }
@@ -67,43 +73,39 @@ public class SimpleUserService implements UserService{
             return Optional.empty();
         }
         try {
-            final Optional <User>  userFromDB = userDao.findUserByLogin(login);
-            if (userFromDB.isPresent()){
+            final Optional<User> userFromDB = userDao.findUserByLogin(login);
+            if (userFromDB.isPresent()) {
                 final User userInstance = userFromDB.get();
                 final String hashedPasswordFromDB = userInstance.getPassword();
-                if (userInstance.getUserRole().equals(Role.ADMIN) && passwordHasher.checkIsEqualsPasswordAndPasswordHash(password, hashedPasswordFromDB)){
+                if (userInstance.getUserRole().equals(Role.ADMIN) && passwordHasher.checkIsEqualsPasswordAndPasswordHash(password, hashedPasswordFromDB)) {
                     return userFromDB;
                 }
             }
         } catch (DaoException e) {
-           throw new ServiceError("Cannot authorize User, userLogin: " + login + "userPassword: " + password);
+            LOG.error("Cannot authorize User, userLogin: " + login + "userPassword: " + password);
+            throw new ServiceError("Cannot authorize User, userLogin: " + login + "userPassword: " + password);
         }
         return Optional.empty();
     }
 
     @Override
     public Optional<User> authenticationIfClient(String login, String password) {
-        if (!userValidator.validateUserDataByLoginAndPassword(login, password)){
+        if (!userValidator.validateUserDataByLoginAndPassword(login, password)) {
             return Optional.empty();
         }
         try {
             final Optional<User> userFromDB = userDao.findUserByLogin(login);
-            if(userFromDB.isPresent()){
+            if (userFromDB.isPresent()) {
                 final User userInstance = userFromDB.get();
                 final String hashedPasswordFromDB = userInstance.getPassword();
-                if (userInstance.getUserRole().equals(Role.CLIENT) && passwordHasher.checkIsEqualsPasswordAndPasswordHash(password,hashedPasswordFromDB)){
+                if (userInstance.getUserRole().equals(Role.CLIENT) && passwordHasher.checkIsEqualsPasswordAndPasswordHash(password, hashedPasswordFromDB)) {
                     return userFromDB;
                 }
             }
         } catch (DaoException e) {
+            LOG.error("Cannot authorise User, userlogin: " + login + "userPassword: " + password);
             throw new SecurityException("Cannot authorise User, userlogin: " + login + "userPassword: " + password);
         }
         return Optional.empty();
-    }
-
-    @Override
-    public List<User> findAllClient() {
-
-        return null;
     }
 }

@@ -4,9 +4,10 @@ import javax.jms.Message;
 import java.util.regex.Pattern;
 
 public class SimpleMessageValidator implements MessageValidator {
+    private static final String TEXT_REGEX = "</?script>";
+
     @Override
-    public boolean validateMessageDataByFromIdAndText(long fromId, long toId, String text) {
-        final String TEXT_REGEX = "</?script>";//почему не дает сделать privet and static?
+    public boolean validateMessageDataFromIdAndText(long fromId, long toId, String text) {
         String[] check = text.split(" ");
         int ber = 0;
         for (String temp : check) {
@@ -14,7 +15,7 @@ public class SimpleMessageValidator implements MessageValidator {
                 ber++;
             }
         }
-        if (fromId >0 && toId >0 && ber == 0) {
+        if (fromId > 0 && toId > 0 && ber == 0) {
             return true;
         }
         return false;

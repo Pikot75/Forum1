@@ -55,30 +55,34 @@ public class User {
         return Objects.hash(id, password, login, userRole);
     }
 
-    public  static class Builder{
-        private  long userId;
-        private  String userPassword;
-        private  String userLogin;
+    public static class Builder {
+        private long userId;
+        private String userPassword;
+        private String userLogin;
 
         private static Role userRole;
 
-        public Builder withUserId(Long userId){
+        public Builder withUserId(Long userId) {
             this.userId = userId;
             return this;
         }
-        public Builder withUserPassword(String userPassword){
+
+        public Builder withUserPassword(String userPassword) {
             this.userPassword = userPassword;
             return this;
         }
-        public Builder withUserLogin(String userLogin){
+
+        public Builder withUserLogin(String userLogin) {
             this.userLogin = userLogin;
             return this;
         }
+
         public Builder withUserRole(Role userRole) {
             Builder.userRole = userRole;
             return this;
         }
-        public User build(){
+
+        public User build() {
             return new User(this);
         }
     }
