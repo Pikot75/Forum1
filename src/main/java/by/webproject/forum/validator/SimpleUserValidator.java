@@ -1,9 +1,13 @@
 package by.webproject.forum.validator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SimpleUserValidator implements UserValidator {
+    private static final Logger LOG = LoggerFactory.getLogger(SimpleUserValidator.class);
     private static final String LOGIN_REGEX = "^[a-zA-Z0-9]{6,100}$";
     private static final String PASSWORD_REGEX = "^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,100}$";
 
@@ -18,6 +22,7 @@ public class SimpleUserValidator implements UserValidator {
             final boolean userPasswordIsValid = userPasswordMatcher.find();
             return userLoginIsValid && userPasswordIsValid;
         }
+        LOG.error("Error login and password");
         return false;
     }
 
